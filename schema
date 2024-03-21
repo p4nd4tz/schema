@@ -30,8 +30,7 @@ model Therapist {
   email_verified   Boolean
   is_deleted       Boolean     @default(false)
   status           String      // "student" or "therapist"
-  studentProfile   StudentProfile?
-  therapistProfile TherapistProfile?
+
 }
 
 // Detailed profile information for students
@@ -54,7 +53,7 @@ model StudentProfile {
   linkedin_profile       String?
   referral               String?
   long_bio               String?
-  userTherapist          UserTherapist   @relation(fields: [userTherapistId], references: [id])
+
 }
 
 // Detailed profile information for therapists
@@ -76,5 +75,5 @@ model TherapistProfile {
   linkedin_profile       String
   referral               String
   long_bio               String?
-  userTherapist          UserTherapist   @relation(fields: [userTherapistId], references: [id])
+
 }
