@@ -1,0 +1,80 @@
+// This is your Prisma schema file.
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Basic User Model
+model User {
+  id              BigInt      @id @default(autoincrement())
+  email           String      @unique
+  password        String
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+  email_verified  Boolean
+  is_deleted      Boolean     @default(false)
+}
+
+// Specific User Model for Therapists/Students
+model UserTherapist {
+  id               BigInt      @id @default(autoincrement())
+  email            String      @unique
+  password         String
+  created_at       DateTime    @default(now())
+  updated_at       DateTime    @updatedAt
+  email_verified   Boolean
+  is_deleted       Boolean     @default(false)
+  status           String      // "student" or "therapist"
+  studentProfile   StudentProfile?
+  therapistProfile TherapistProfile?
+}
+
+// Detailed profile information for students
+model StudentProfile {
+  id                     BigInt          @id @default(autoincrement())
+  userTherapistId        BigInt
+  profile_pic            String?
+  dob                    DateTime
+  gender                 String
+  college_name           String
+  current_cgpa           Float
+  specialization         String
+  current_location       String
+  language               String
+  daily_hours            Int
+  experience             Int
+  heard_about            String
+  working_on_other_platform Boolean
+  onboard_reason         String
+  linkedin_profile       String?
+  referral               String?
+  long_bio               String?
+  userTherapist          UserTherapist   @relation(fields: [userTherapistId], references: [id])
+}
+
+// Detailed profile information for therapists
+model TherapistProfile {
+  id                     BigInt          @id @default(autoincrement())
+  userTherapistId        BigInt
+  dob                    DateTime
+  gender                 String
+  college_name           String
+  passout_year           Int
+  specialization         String
+  current_location       String
+  language               String
+  daily_hours            Int
+  experience             Int
+  heard_about            String
+  working_on_other_platform Boolean
+  onboard_reason         String
+  linkedin_profile       String
+  referral               String
+  long_bio               String?
+  userTherapist          UserTherapist   @relation(fields: [userTherapistId], references: [id])
+}
