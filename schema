@@ -29,14 +29,16 @@ model Therapist {
   updated_at       DateTime    @updatedAt
   email_verified   Boolean
   is_deleted       Boolean     @default(false)
-  status           String      // "student" or "therapist"
-
+  status           String      // "student" or "professional"
+  is_completed     Boolean
+  students         Student[]
+  professionals    Professional[]
 }
 
 // Detailed profile information for students
-model StudentProfile {
+model Student {
   id                     BigInt          @id @default(autoincrement())
-  userTherapistId        BigInt
+  therapist_id           BigInt
   profile_pic            String?
   dob                    DateTime
   gender                 String
@@ -53,13 +55,13 @@ model StudentProfile {
   linkedin_profile       String?
   referral               String?
   long_bio               String?
-
+  therapist              Therapist @relation(fields: [therapist_id], references: [id])
 }
 
 // Detailed profile information for therapists
-model TherapistProfile {
+model Professional {
   id                     BigInt          @id @default(autoincrement())
-  userTherapistId        BigInt
+  therapist_id           BigInt
   dob                    DateTime
   gender                 String
   college_name           String
@@ -75,5 +77,5 @@ model TherapistProfile {
   linkedin_profile       String
   referral               String
   long_bio               String?
-
+  therapist              Therapist @relation(fields: [therapist_id], references: [id])
 }
